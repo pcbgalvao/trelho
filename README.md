@@ -1,3 +1,34 @@
+## Trello Challenge
+### Chalenge 
+Create a Trello like web application. It should allow data persistence and means to change it (CRUD operations). You should pace your efforts for a two week project and deliver the most functionalities and look alike features with Trello that you can squeeze in this time frame.
+
+### Functional and UI components Requirements 
+1. Authentication/sign up (can be simple) using JWT
+2. CRUD operations on cards and related entities
+3. global lists, 
+4. moveable cards, 
+5. multiple lists inside cards, 
+6. description, 
+7. auto-save inputs
+
+### Tech requirements
+1. React hooks,
+2.  Typescript, 
+3. Redux, Material-ui (optional, you can choose any other UI library) 
+4.  Use JSON Server to provide a simple backend API for the project (ask for help if need to)
+5.  Unit testing (jest) for React is a plus
+
+### Doubts 
+Olá Nuno, olá a todos, 
+quanto aos requisitos e por que têm impacto tanto na parte de front-end, como no desenho dos esquemas (schemas) do mongo, as minhas dúvidas são as seguntes:
+
+1. Se o requisitos referem que temos que implementar um componente de "global lists", pressupõe-se que as listas poderão ser visiveis por todos os utilizadores registados, ou privada, só visiveis pelo utilizador autenticado?
+2. Na sequência do ponto anterior, caso se confirme que as listas poderão ser globais ou privadas, deve-se concluir que isso também se aplica aos cartões associadas a essas listas?
+3. "Multiple lists inside cards", quer dizer que um cartão poderá estar associado a diferentes listas?
+4. Somando tudo, os cartões herdam a visibilidade da lista onde estão inseridos?
+5. Deveremos implementar pesquisas de "Boards", "Lists" e "Cards"?
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
 
 ## Available Scripts
