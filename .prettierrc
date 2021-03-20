@@ -1,0 +1,14 @@
+{
+  "extends": ["eslint:recommended", "prettier"],
+  "env": {
+    "es6": true,
+    "node": true
+  },
+
+  "tabWidth": 2,
+  "useTabs": false,
+
+  "rules": {
+    "no-unused-vars": ["error", { "caughtErrors": "none" }]
+  }
+}

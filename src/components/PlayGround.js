@@ -1,15 +1,27 @@
 import React from "react";
-import {useSelector, useDispatch} from 'react-redux';
-import {
+import { useSelector, useDispatch } from "react-redux";
 
-} from '../store/listsSlice';
+import UserRegister from "./UserRegister";
+
+import {
+  selectIsUserLoggedIn,
+  selectFullname,
+  selectLogin,
+  selectEmail,
+  selectPassword,
+} from "../store/userLoggedInSlice";
 
 const PlayGround = () => {
-  return (
-    <div className="playground">
+  const isUserLoggedIn = useSelector(selectIsUserLoggedIn);
+
+  if (isUserLoggedIn)
+    return (
+      <div className="playground">
         <p>This is the PlayGround</p>
-    </div>
-  );
+      </div>
+    );
+
+  return <UserRegister />;
 };
 
 export default PlayGround;
