@@ -1,42 +1,61 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import _ from "lodash";
-import userApi from "../data/userData";
 
-const fetchUser = createAsyncThunk("user/get", async (userLogin) => {
-  const url = `/user/get/${userLogin}`;
-  const response = await userApi.get(url);
+import loginRestApi from "../restApi/loginRestApi";
+import CONSTANTS from "../constants";
+import { CommentActions } from "semantic-ui-react";
 
-  const payload = response.data.reduce(
-    (accu, country) => ({
-      ...accu,
-      [country.name]: { ...country, checked: false },
-    }),
-    {}
-  );
-  return payload;
+const INITIAL_STATE = {
+  _id: null,
+  jwt: {},
+  role: "",
+  fullname: "",
+  username: "",
+  email: "",
+  password: "",
+};
+
+const loginUser = createAsyncThunk("/login", async (userCredentials) => {
+  console.log("store userCredentials-", userCredentials);
+  const result = await loginRestApi.login(userCredentials);
+  const { errorCode, accessToken, userDBCredentials } = result.data;
+  if (errorCode === -1) {
+    alert("Wrong credentials. Please try again");
+    return { errorCode };
+  }
+  return { jwt: accessToken, ...userDBCredentials };
 });
 
-export const userLoggedIn = createSlice({
+export const userLoggedInSlice = createSlice({
   name: "userLoggedIn",
-  initialState: {
-    isUserLoggedIn: false,
-    fullname: "",
-    login: "",
-    email: "",
-    password: "",
+  initialState: INITIAL_STATE,
+  reducers: {
+    logoutUser: (state, action) => {
+      return INITIAL_STATE;
+    },
   },
-  reducers: {},
   extraReducers: {
-    [fetchUser.fulfilled]: (state, action) => {
-      return { ...action.payload };
+    [loginUser.fulfilled]: (state, action) => {
+      return {
+        ...action.payload,
+      };
     },
   },
 });
 
-export const selectIsUserLoggedIn = (state) =>state.userLoggedIn.isUserLoggedIn;
-export const selectFullname = (state) =>state.userLoggedIn.fullname;
-export const selectLogin = (state) => state.userLoggedIn.login;
+// ### Actions
+//
+export { loginUser };
+export const { logoutUser } = userLoggedInSlice.actions;
+
+export const selectIsUserLoggedIn = (state) => state.userLoggedIn._id !== null;
+export const selectJwt = (state) => state.userLoggedIn.jwt;
+export const selectRole = (state) => state.userLoggedIn.role;
+export const selectFullname = (state) => state.userLoggedIn.fullname;
+export const selectUsername = (state) => state.userLoggedIn.username;
 export const selectEmail = (state) => state.userLoggedIn.email;
 export const selectPassword = (state) => state.userLoggedIn.password;
 
-export default userLoggedIn.reducer;
+// ### Reducers
+//
+export default userLoggedInSlice.reducer;
