@@ -1,6 +1,14 @@
 import React, { useEffect, useReducer, useState } from "react";
 import _ from "lodash";
-import { Icon, Grid, Header, Card, Modal, Button } from "semantic-ui-react";
+import {
+  Checkbox,
+  Input,
+  Grid,
+  Header,
+  Card,
+  Modal,
+  Button,
+} from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 const uniqid = require("uniqid");
 
@@ -10,7 +18,7 @@ import CardDetailsModal from "./CardDetailsModal";
 import { connect, useSelector, useDispatch } from "react-redux";
 import { selectIsUserLoggedIn } from "../store/userLoggedInSlice";
 import { fetchLists } from "../store/listsSlice";
-import { fetchCards } from "../store/cardsSlice";
+import { setCard, fetchCards } from "../store/cardsSlice";
 
 const initialState = 0;
 const reducerState = (state, action) => {
@@ -35,15 +43,16 @@ const Dashboard = ({
   fetchLists,
   fetchCards,
   listCards,
+  setCard,
 }) => {
-  const [openModal, setOpenModal] = useState({});
+  const [openModalCard, setOpenModalCard] = useState(null);
   const [open, setOpen] = useState(false);
   //  const [listsContent, setListContent] = useState(lists);
   const [cardContent, setCardContent] = useState({});
 
   useEffect(() => {
-    fetchLists();
-    fetchCards();
+    //fetchLists();
+    //fetchCards();
   });
   // const [state, dispatch1] = useReducer(reducerState, initialState);
 
@@ -96,7 +105,7 @@ const Dashboard = ({
           renderedCheckListItems = checkList.items.map((item) => {
             return (
               <div key={uniqid(item.name)}>
-                {item.name}:{item.value}
+                <Checkbox label={item.name} checked={item.value} />
               </div>
             );
           });
@@ -105,7 +114,9 @@ const Dashboard = ({
         return (
           <div key={uniqid(checkList.title)}>
             <div>
-              <h5>Title: {checkList.title}</h5>
+              <h5>
+                <Input transparent value={checkList.title} />
+              </h5>
             </div>
             {renderedCheckListItems}
           </div>
@@ -124,7 +135,7 @@ const Dashboard = ({
     return (
       <div>
         <h3>
-          <b>Description</b>: {cardDetails.description}
+          <Input transparent value={cardDetails.description} />
         </h3>
         <h4>Check Lists</h4>
         {renderedCheckLists}
@@ -132,41 +143,44 @@ const Dashboard = ({
     );
   }; // End ShowCard
 
-  function openModalHandler(event) {
-    const cardId = event.target.value;
-    //setOpenModal({...openModal, [cardId]:true});
-    setOpen(true);
-    //setCardContent(selectCard(cardId));
+  function openModalHandler(event, data) {
+    const cardId = data;
+    if (!openModalCard) {
+      setOpenModalCard(cardId);
+      setCardContent(selectCard(cardId));
+    }
   }
   function closeModalHandler(event) {
-    const cardId= event.target.value;
-    //setOpenModal({...openModal, [cardId]:false});
-    setOpen(false);
-    //setCardContent({});
+    setCard(cardContent);
+    setOpenModalCard(null);
+    setCardContent({});    
   }
 
   const CardDetailsModal = ({ cardDetails }) => {
+    console.count("CardsDetailModal."+cardDetails._id);
+    const openessedStatus = () => {
+      return !!openModalCard && openModalCard == cardDetails._id;
+    };
+
     console.log("CardDetailsModal-cardContent-", cardContent);
     console.log("CardDetailsModal-cardDetails-", cardDetails);
     return (
       <Grid.Column width={4}>
         <Modal
+          content={cardDetails._id}
           onClose={(event) => closeModalHandler(event)}
-          onOpen={(event) => openModalHandler(event)}
-          open={open}
+          onOpen={(event) => openModalHandler(event, cardDetails._id)}
+          open={openessedStatus()}
           size="large"
-          as={ShowCard}
-          trigger={
-            <Button icon value={cardDetails._id}>
-              <Icon name="expand arrows alternate" size="small" />
-            </Button>
-          }
+          dimmer="true"
+          trigger={<Button icon="expand arrows alternate" />}
         >
-
-          <Modal.Header>{cardDetails.title}</Modal.Header>
+          <Modal.Header>
+            <Input transparent value={cardDetails.title} />
+          </Modal.Header>
           <Modal.Content>
             <Modal.Description>
-              
+              <ShowCard />
             </Modal.Description>
           </Modal.Content>
         </Modal>
@@ -245,4 +259,4 @@ const mapStateToProps = (state, ownProps) => {
     },
   };
 };
-export default connect(mapStateToProps, { fetchLists, fetchCards })(Dashboard);
+export default connect(mapStateToProps, { setCard, fetchLists, fetchCards })(Dashboard);
