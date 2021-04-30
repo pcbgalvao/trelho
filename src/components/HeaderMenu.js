@@ -80,7 +80,7 @@ const HeaderMenu = (props) => {
     );
   };
 
-  console.count("Menu");
+  console.count("HeaderMenu");
   return (
     <Menu>
       <Grid.Column>

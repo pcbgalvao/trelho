@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { useHistory } from "react-router-dom";
 import { Form, Field } from "react-final-form";
 import { connect } from "react-redux";
-import ModalPopUp from "./ModalPopUp";
+
 
 import { Form as FormDisplay, Button, Label, Input } from "semantic-ui-react";
 import { loginUser } from "../store/userLoggedInSlice";

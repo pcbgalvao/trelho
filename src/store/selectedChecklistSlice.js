@@ -77,11 +77,14 @@ export const cardCheckListsSlice = createSlice({
   name: "cardCheckLists",
   initialState: INITIAL_STATE,
   reducers: {
-    setCardCheckList: (state, action) =>  {
-      
+    setCardCheckList: (state, action) => {
       return state;
-    }
+    },
+    updatetCheckListItem: (state, action) => {
+      return { ...state };
+    },
   },
+
   extraReducers: {},
 });
 
@@ -91,7 +94,10 @@ export const selectcardName = (state) => {
 };
 export const selectLists = (state) => state.cardCheckLists.lists;
 
-export const {setCardCheckList} = cardCheckListsSlice.actions;
+export const {
+  updatetCheckListItem,
+  setCardCheckList,
+} = cardCheckListsSlice.actions;
 
 // ### Reducers
 //

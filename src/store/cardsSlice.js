@@ -5,28 +5,30 @@ import _ from "lodash";
 import CONSTANTS from "../constants";
 import { CommentActions } from "semantic-ui-react";
 
-const INITIAL_STATE = [
+const INITIAL_STATE = [];
+const INITIAL_STATE1 = [
   {
     _id: 11,
     fk_listid: 1,
     fk_userid: 1,
     title: "House Cleaning",
+    creationTimestamp: 1619605503272,
     description: "Things I must do in each two weaks at the most",
   },
-  {
-    _id: 12,
-    fk_listid: 2,
-    fk_userid: 1,
-    title: "supermaket",
-    description: "food, hamers, ...",
-  },
-  {
-    _id: 13,
-    fk_listid: 3,
-    fk_userid: 1,
-    title: "Destinations",
-    description: "Countries, Regions",
-  },
+  //  {
+  //    _id: 12,
+  //    fk_listid: 2,
+  //    fk_userid: 1,
+  //    title: "supermaket",
+  //    description: "food, hamers, ...",
+  //},
+  //{
+  //    _id: 13,
+  //fk_listid: 3,
+  //fk_userid: 1,
+  //title: "Destinations",
+  //description: "Countries, Regions",
+  //},
 ];
 
 const cardsSlice = createSlice({
@@ -37,7 +39,12 @@ const cardsSlice = createSlice({
       return state;
     },
     setCard: (state, action) => {
-      return state;
+      let newCard = action.payload;
+      newCard.creationtimestamp = Date.now();
+      return _.unionBy([newCard], state, "_id");
+    },
+    setCardTitle: (state, action) => {
+      return _.unionBy([action.payload], state, "_id");
     },
   },
   extraReducers: {},
@@ -48,7 +55,7 @@ export const selectcardName = (state) => {
   return state.cards.cardname;
 };
 export const selectLists = (state) => state.cards.lists;
-export const { setCard, fetchCards } = cardsSlice.actions;
+export const { setCardTitle, setCard, fetchCards } = cardsSlice.actions;
 // ### Reducers
 //
 export default cardsSlice.reducer;

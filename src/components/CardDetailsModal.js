@@ -11,8 +11,8 @@ const CardDetailsModal = (props) => {
   const { card } = props;
   const [open, setOpen] = useState(false);
 
-  const CheckListItems = ({ checkListItems }) => {
-    return checkListItems.map((item) => {
+  const ChecklistItems = ({ checklistItems }) => {
+    return checklistItems.map((item) => {
       return (
         <div key={uniqid(item.name)}>
           {item.name}:{item.value}
@@ -21,7 +21,7 @@ const CardDetailsModal = (props) => {
     });
   };
 
-  const ShowCheckList = ({ checklistLists }) => {
+  const ShowChecklist = ({ checklistLists }) => {
     const renderChecklistItems = checklistLists.map((checklist) => {
       return (
         <div key={uniqid(checklist.title)}>
@@ -29,7 +29,7 @@ const CardDetailsModal = (props) => {
             <h3>{checklist.title}</h3>
           </div>
           <h2>Checklists</h2>
-          <CheckListItems checkListItems={checklist.items} />
+          <ChecklistItems checklistItems={checklist.items} />
         </div>
       );
     });
@@ -50,7 +50,7 @@ const CardDetailsModal = (props) => {
           <Card.Content header={card.title} />
           <Card.Content description={"Description: " + card.description} />
           <Card.Content extra>
-            <ShowCheckList checklistLists={card.checklists} />
+            <ShowChecklist checklistLists={card.checklists} />
           </Card.Content>
         </Card>
         <Card color="red" centered>
@@ -58,7 +58,7 @@ const CardDetailsModal = (props) => {
             <Card.Header>{card.title} </Card.Header>
             <Card.Meta>Description: {card.description} </Card.Meta>
             <Card.Description>
-              <ShowCheckList checklistLists={card.checklists} />
+              <ShowChecklist checklistLists={card.checklists} />
             </Card.Description>
           </Card.Content>
         </Card>
@@ -66,7 +66,7 @@ const CardDetailsModal = (props) => {
     );
   };
 
-  // <Card.Group items={renderCheckList(card.checklists)} />
+  // <Card.Group items={renderChecklist(card.checklists)} />
 
   return (
     <Modal
