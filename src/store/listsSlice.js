@@ -7,7 +7,7 @@ import { CommentActions } from "semantic-ui-react";
 
 const INITIAL_STATE = {
   1: {
-    _id: 1,
+    _id:'7f89m3sko6agty9',
     fk_boardid: 1,
     fk_userid: 1,
     name: "House Things",

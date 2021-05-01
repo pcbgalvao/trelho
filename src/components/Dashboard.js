@@ -4,6 +4,7 @@ import _ from "lodash";
 import { Input, Grid, Card, Header } from "semantic-ui-react";
 import "semantic-ui-css/semantic.css";
 import ShowListsList from "./ShowListsList";
+
 const uniqid = require("uniqid");
 
 import LoginPage from "./LoginPage";
