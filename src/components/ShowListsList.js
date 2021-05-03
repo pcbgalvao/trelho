@@ -30,7 +30,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
 const getListStyle = (isDraggingOver) => ({
   background: isDraggingOver ? "#a1ffc5" : "#daffff",
   padding: grid,
-  width: 250,
+  width: 350,
 });
 
 const ShowListsList = ({ listsList, createList }) => {
@@ -73,7 +73,7 @@ const ShowListsList = ({ listsList, createList }) => {
 
   const renderedLists = listSet.map((list, idx) => {
     return (
-      <Draggable key={`lista-${list._id}`} draggableId={`lista-${list._id}`} index={idx}>
+      <Draggable key={list._id} draggableId={list._id} index={idx}>
         {(provided, snapshot) => (
           <div
             ref={provided.innerRef}
@@ -98,21 +98,7 @@ const ShowListsList = ({ listsList, createList }) => {
               ref={provided.innerRef}
               style={getListStyle(snapshot.isDraggingOver)}
             >
-              {listSet.map((list, idx) => {
-                return (
-                  <Draggable key={list._id} draggableId={list._id} index={idx}>
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
-                        <ShowList list={list} />
-                      </div>
-                    )}
-                  </Draggable>
-                );
-              })}
+              {renderedLists}
               {provided.placeholder}
             </div>
           )}
