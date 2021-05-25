@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
-
 import Checkbox from "@material-ui/core/Checkbox";
+import { useDispatch, useSelector } from "react-redux";
+import { updateChecklistItem } from "../stores/checklistsItemsSlice";
 
 function ShowChecklistItem(props) {
-  const [checklistItem, setChecklistItem] = useState(props.checklistItem);
+  const { checklistItem } = props;
+  const dispatch = useDispatch();
 
   const handleChange = (event) => {
-    setChecklistItem({ ...checklistItem, value: event.target.checked });
+    dispatch(
+      updateChecklistItem({ ...checklistItem, value: event.target.checked })
+    );
   };
 
   useEffect(() => {

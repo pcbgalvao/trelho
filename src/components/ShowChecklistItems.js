@@ -27,20 +27,21 @@ function ShowChecklistItems(props) {
     };
 
     dispatch(createChecklistItem(newChecklistItem));
-    //setAddChecklistItemActive(false);
   };
 
   const onAddChecklistItemCancelHandler = (event) => {
     setAddChecklistItemActive(false);
   };
 
+  //const updateCheckListValue = 
   return (
     <>
       <div className="list">
         {checklistItemsSet.map((checklistItem) => {
           return (
             <div key={checklistItem._id}>
-              <ShowChecklistItem checklistItem={checklistItem} />
+              <ShowChecklistItem checklistItem={checklistItem} 
+               />
             </div>
           );
         })}

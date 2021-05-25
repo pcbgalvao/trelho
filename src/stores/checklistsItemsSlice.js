@@ -70,8 +70,8 @@ const checklistsItemsSlice = createSlice({
     createChecklistItem(state, action) {
       return [...state, action.payload]
     },
-    setSelectedTitle: (state, action) => {
-      return { ...state, title: action.payload };
+    updateChecklistItem: (state, action) => {
+      return _.unionBy([action.payload], state, "_id");
     },
     addItemToChecklist: (state, action) => {
       return { ...state, items: [...state.items, action.payload] };
@@ -86,6 +86,7 @@ const checklistsItemsSlice = createSlice({
 });
 
 export const {
+  updateChecklistItem,
   createChecklistItem,
   setSelectedTitle,
   renameItemToChecklist
