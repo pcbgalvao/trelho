@@ -1,16 +1,9 @@
-import React, { useEffect, useReducer, useState, useRef } from "react";
+import React, { useState } from "react";
+import { Input, Button, Icon, IconButton, CancelIcon } from "@material-ui/core";
 import useKeypress from "react-use-keypress";
-import { useClickAway } from "use-click-away";
-import { Input, Button, Icon } from "semantic-ui-react";
-import "semantic-ui-css/semantic.css";
 
 const ShowAddList = ({ onAddHandler, onCancelHandler }) => {
   const [input, setInput] = useState("");
-
-  const ref = useRef();
-  useClickAway(ref, (event) => {
-    onCancelHandler();
-  });
 
   useKeypress(["Enter", "Escape"], (event) => {
     switch (event.key) {
@@ -21,6 +14,8 @@ const ShowAddList = ({ onAddHandler, onCancelHandler }) => {
         if (!!input) {
           onAddHandler(input);
         }
+        break;
+      default:
     }
   });
 
@@ -36,16 +31,19 @@ const ShowAddList = ({ onAddHandler, onCancelHandler }) => {
 
   console.count("ShowAddList");
   return (
-    <div ref={ref}>
+    <div>
       <Input
         placeholder="Enter a title for this List..."
         value={input}
         onChange={onChangeInput}
+        autoFocus
       />
       <Button onClick={onClickHandler}>Add</Button>
-      <Button onClick={onCancelHandler}>
-        <Icon name="cancel" />
-      </Button>
+      {/*
+        <IconButton onClick={onCancelHandler} aria-label="cancel">
+        <CancelIcon />
+      </IconButton>
+*/}
     </div>
   );
 }; // End ShowAddList

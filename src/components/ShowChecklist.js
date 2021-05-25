@@ -1,68 +1,36 @@
-import React, { Memo, useEffect, useState, useRef } from "react";
-import { useClickAway } from "use-click-away";
-import { connect } from "react-redux";
-import "semantic-ui-css/semantic.css";
-import ShowItemsChecklist from "./ShowItemsChecklist";
-import { Input, Icon } from "semantic-ui-react";
-import _ from "lodash";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import ShowInput from "./ShowInput";
+import ShowChecklistItems from "./ShowChecklistItems";
+import { updateChecklist } from "../stores/checklistsSlice";
 
-const uniqid = require("uniqid");
+function ShowChecklist({ checklistId }) {
+  const checklist = useSelector((state) =>
+    state.checklists.filter((checklist) => checklist._id === checklistId)[0]
+  );
+  const [editChecklistTitleActive, setEditChecklistTitleActive] = useState(
+    false
+  );
+  const dispatch = useDispatch();
 
-const ShowChecklist = ({ checklist, onDeleteChecklist, updateChecklist }) => {
-  const [checklistTitle, setChecklistTitle] = useState(checklist.title);
-  const [itemsList, setItemsList] = useState(checklist.items);
-
-  const ref = useRef();
-  //useClickAway(ref, (event) => {
-  //    console.log("Clicked away from ShowChecklist");
-  //  });
-
-  useEffect(() => {
-    let newChecklist = {
-      ...checklist,
-      title: checklistTitle,
-      items: itemsList,
-    };
-
-    if (!_.isEqual(newChecklist, checklist)) {
-      updateChecklist(newChecklist);
-    }
-  }, [itemsList, checklistTitle]);
-
-  const onChangeTitle = (event) => {
-    setChecklistTitle(event.target.value);
+  const updateChecklistTitle = (newChecklistTitle) => {
+    const updatedChecklist = { ...checklist, title: newChecklistTitle };
+    dispatch(updateChecklist(updatedChecklist));
   };
 
-  const onDeleteHandler = (event) => {
-    onDeleteChecklist(checklist._id);
-  };
-
-  console.count("ShowChecklist");
   return (
-    <div ref={ref}>
-      <div>
-        <Input
-          transparent
-          value={checklistTitle}
-          onChange={onChangeTitle}
+    <div>
+      <h4>
+        <ShowInput
+          inputValue={checklist.title}
+          setInputValue={updateChecklistTitle}
+          inputActive={editChecklistTitleActive}
+          setInputActive={setEditChecklistTitleActive}
         />
-        <div onClick={onDeleteHandler}>
-          <Icon name="delete" />
-        </div>
-      </div>
-      <ShowItemsChecklist itemsList={itemsList} setItemsList={setItemsList} />
+      </h4>
+      <ShowChecklistItems checklistId={checklist._id} />
     </div>
   );
-};
+}
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    selectedCardChecklists: function selectedCardChecklists(ownProps) {
-      return state.checklistsSlice.filter(
-        (checklist) => checklist.fk_cardid == cardId
-      );
-    },
-  };
-};
-
-export default React.memo(ShowChecklist);
+export default ShowChecklist;

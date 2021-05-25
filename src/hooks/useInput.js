@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Input, Button, Icon, IconButton, CancelIcon } from "@material-ui/core";
+import { Input, Button, IconButton } from "@material-ui/core";
+import CancelIcon from "@material-ui/icons/Cancel";
 import useKeypress from "react-use-keypress";
 
-const ShowAddChecklist = ({ onAddHandler, onCancelHandler }) => {
+const ShowAddList = ({ placeholder, onAddHandler, onCancelHandler }) => {
   const [input, setInput] = useState("");
 
   useKeypress(["Enter", "Escape"], (event) => {
@@ -29,23 +30,22 @@ const ShowAddChecklist = ({ onAddHandler, onCancelHandler }) => {
     }
   };
 
-  console.count("ShowAddChecklist");
+  console.count("UseInput");
   return (
     <div>
       <Input
-        placeholder="Enter a CheckList"
+        placeholder={placeholder}
         value={input}
         onChange={onChangeInput}
         autoFocus
       />
       <Button onClick={onClickHandler}>Add</Button>
-      {/*
-        <IconButton onClick={onCancelHandler} aria-label="cancel">
+
+      <IconButton onClick={onCancelHandler} aria-label="cancel">
         <CancelIcon />
       </IconButton>
-*/}
     </div>
   );
 }; // End ShowAddList
 
-export default ShowAddChecklist;
+export default ShowAddList;

@@ -1,15 +1,9 @@
-import React, { useEffect, useReducer, useState, useRef } from "react";
-import { Button, Input, Icon } from "semantic-ui-react";
-import { useClickAway } from "use-click-away";
+import React, { useState } from "react";
+import { Input, Button, IconButton, CancelIcon } from "@material-ui/core";
 import useKeypress from "react-use-keypress";
 
 const ShowAddCard = ({ onAddHandler, onCancelHandler }) => {
   const [input, setInput] = useState("");
-
-  const ref = useRef();
-  useClickAway(ref, (event) => {
-    onCancelHandler();
-  });
 
   useKeypress(["Enter", "Escape"], (event) => {
     switch (event.key) {
@@ -20,35 +14,31 @@ const ShowAddCard = ({ onAddHandler, onCancelHandler }) => {
         if (!!input) {
           onAddHandler(input);
         }
+        break;
+      default:
     }
   });
-  
+
   const onChangeInput = (event) => {
     setInput(event.target.value);
   };
-  const onClickHandler = () => {
-    onAddHandler(input);
-  };
 
-  const onKeypressHandler = (event) => {
-    if (event.key === "Enter") {
+  const onClickHandler = () => {
+    if (input) {
       onAddHandler(input);
     }
   };
 
   console.count("ShowAddCard");
   return (
-    <div ref={ref}>
+    <div>
       <Input
-        placeholder="Enter a title for this card..."
+        placeholder="Enter a title for this Card..."
         value={input}
         onChange={onChangeInput}
-        onKeyPress={onKeypressHandler}
+        autoFocus
       />
       <Button onClick={onClickHandler}>Add</Button>
-      <Button onClick={onCancelHandler}>
-        <Icon name="cancel" />
-      </Button>
     </div>
   );
 }; // End ShowAddCard

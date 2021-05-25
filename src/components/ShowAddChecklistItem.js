@@ -1,18 +1,23 @@
 import React, { useState } from "react";
-import { Input, Button, Icon, IconButton, CancelIcon } from "@material-ui/core";
+import { Input, Button, ClickAwayListener } from "@material-ui/core";
 import useKeypress from "react-use-keypress";
 
-const ShowAddChecklist = ({ onAddHandler, onCancelHandler }) => {
+const ShowAddChecklistItem = ({ onAddHandler, onCancelHandler }) => {
   const [input, setInput] = useState("");
 
   useKeypress(["Enter", "Escape"], (event) => {
     switch (event.key) {
       case "Escape":
+        event.preventDefault();
+        console.log("#$$$##$#$#Q$Q#$Q#$Q#$");
         onCancelHandler();
+        event.stopPropagation();
         break;
       case "Enter":
         if (!!input) {
+          event.preventDefault();
           onAddHandler(input);
+          event.stopPropagation();
         }
         break;
       default:
@@ -29,23 +34,25 @@ const ShowAddChecklist = ({ onAddHandler, onCancelHandler }) => {
     }
   };
 
-  console.count("ShowAddChecklist");
+  console.count("ShowAddChecklistItem");
   return (
-    <div>
-      <Input
-        placeholder="Enter a CheckList"
-        value={input}
-        onChange={onChangeInput}
-        autoFocus
-      />
-      <Button onClick={onClickHandler}>Add</Button>
-      {/*
+    <ClickAwayListener onClickAway={onCancelHandler}>
+      <div>
+        <Input
+          placeholder="Enter an Item..."
+          value={input}
+          onChange={onChangeInput}
+          autoFocus
+        />
+        <Button onClick={onClickHandler}>Add</Button>
+        {/*
         <IconButton onClick={onCancelHandler} aria-label="cancel">
         <CancelIcon />
       </IconButton>
 */}
-    </div>
+      </div>
+    </ClickAwayListener>
   );
 }; // End ShowAddList
 
-export default ShowAddChecklist;
+export default ShowAddChecklistItem;
