@@ -9,38 +9,38 @@ const INITIAL_STATE = [
     _id: "1",
     fk_userid: "1",
     fk_cardid: "1",
-    title: "Leaving room"
+    title: "Leaving room",
   },
   {
     _id: "2",
     fk_userid: "1",
     fk_cardid: "2",
-    title: "Kitechen"
+    title: "Kitechen",
   },
   {
     _id: "3",
     fk_userid: "1",
     fk_cardid: "3",
-    title: "Leaving room"
+    title: "Leaving room",
   },
   {
     _id: "4",
     fk_userid: "1",
     fk_cardid: "1",
-    title: "Bed room"
+    title: "Bed room",
   },
   {
     _id: "5",
     fk_userid: "1",
     fk_cardid: "1",
-    title: "Buttler"
+    title: "Buttler",
   },
   {
     _id: "6",
     fk_userid: "1",
     fk_cardid: "1",
-    title: "Cleaning"
-  }
+    title: "Cleaning",
+  },
 ];
 
 export const checklistsSlice = createSlice({
@@ -60,15 +60,15 @@ export const checklistsSlice = createSlice({
     createChecklist: (state, action) => {
       return [...state, action.payload];
     },
-    removeChecklist: (state, action) => {
+    deleteChecklist: (state, action) => {
       const checklistId = action.payload;
       return _.reject(state, (checklist) => {
         return checklist._id === checklistId;
       });
-    }
+    },
   },
 
-  extraReducers: {}
+  extraReducers: {},
 });
 
 export const selectcardName = (state) => {
@@ -82,7 +82,7 @@ export const {
   setCardChecklist,
   createChecklist,
   updateChecklist,
-  removeChecklist
+  deleteChecklist,
 } = checklistsSlice.actions;
 
 // ### Reducers

@@ -7,6 +7,8 @@ import { TextField } from "@material-ui/core";
 import ShowAddChecklist from "./ShowAddChecklist";
 import ShowChecklists from "./ShowChecklists";
 import PopupComponent from "./PopupComponent";
+import Box from "@material-ui/core/Box";
+import ShowTasksCompletedPercentage from "./ShowTasksCompletedPercentage";
 import { ClickAwayListener } from "@material-ui/core";
 import ShowInput from "./ShowInput";
 import ShowInputIcon from "./ShowInputIcon";
@@ -41,24 +43,50 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
+  listcard: {
+    width: "100%",
+  },
 }));
 
 function ShowModalCardDetails(props) {
   const { card } = props;
   const [addChecklistActive, setAddChecklistActive] = useState(false);
-  const [editCardTitleActive, setEditCardTitleActive] = React.useState(false);
-  const [modalStyle] = React.useState(getModalStyle);
-  const [open, setOpen] = React.useState(false);
+  const [editCardTitleActive, setEditCardTitleActive] = useState(false);
+  const [modalStyle] = useState(getModalStyle);
+  const [open, setOpen] = useState(false);
+  const [showMenuList, setShowMenuList] = useState(false);
 
   const dispatch = useDispatch();
   const listName = useSelector(
     (state) => state.lists.filter((list) => list._id === card.fk_listid)[0].name
   );
+  const cardsTasksCompleted = useSelector((state) => {
+    let items = [];
+    const checklistsResult = state.checklists.filter(
+      (checklist) => checklist.fk_cardid === card._id
+    );
+
+    checklistsResult.forEach((checklist) =>
+      state.checklistsItems.forEach((item) => {
+        if (
+          item.fk_checklistid === checklist._id &&
+          checklist.fk_cardid === card._id
+        ) {
+          items.push(item);
+        }
+      })
+    );
+
+    const numberTasksCompleted = items.filter((item) => item.value).length;
+    const numberTasks = items.length;
+
+    return `${numberTasksCompleted}/${numberTasks}` + "";
+  });
 
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
 
-  const handleOpenModal = (event) => {
+  const handleOpenCardDetailsModal = (event) => {
     setOpen(true);
   };
 
@@ -120,14 +148,13 @@ function ShowModalCardDetails(props) {
               fullWidth
               value={card.description}
               aria-label="maximum height"
-              defaultValue="Enter a description"
+              placeholder="Enter a description"
               onChange={updateCardField("description")}
             />
-
             <ShowChecklists cardId={card._id} />
           </div>
           <div>
-            <h4>ADD TO CARD</h4>
+            <h4>Add a Card</h4>
             <PopupComponent title="Checklist">
               <ShowAddChecklist
                 onAddHandler={onAddChecklistHandler}
@@ -139,29 +166,54 @@ function ShowModalCardDetails(props) {
       </div>
     </div>
   );
+  const enableMenuList = () => {
+    setShowMenuList(true);
+  };
+
+  const disableMenuList = () => {
+    setShowMenuList(false);
+  };
 
   console.log("showModalCardDetails-editCardTitleActive-", editCardTitleActive);
   console.log("showModalCardDetails-listName-", listName);
   return (
     <div>
-      <div variant="contained">
-        {editCardTitleActive ? (
-          <ShowInput
-            inputValue={card.title}
-            setInputValue={updateCardField("title")}
-            inputActive={editCardTitleActive}
-            setInputActive={setEditCardTitleActive}
+      <div onMouseLeave={disableMenuList} onMouseEnter={enableMenuList}>
+        <div className="listcard">
+          <Box display="flex" alignItems="center">
+            {editCardTitleActive ? (
+              <Box minWidth={250}>
+                <ShowInput
+                  inputValue={card.title}
+                  setInputValue={updateCardField("title")}
+                  inputActive={editCardTitleActive}
+                  setInputActive={setEditCardTitleActive}
+                />
+              </Box>
+            ) : (
+              <Box width="100%" mr={1}>
+                <div onClick={() => handleOpenCardDetailsModal()}>{card.title}</div>
+              </Box>
+            )}
+            <Box width="100%" height="80%" mr={1}>
+              <div variant="icon-buttons">
+                {showMenuList ? (
+                  <IconButton
+                    size="small"
+                    onClick={() => setEditCardTitleActive(true)}
+                  >
+                    <Edit />
+                  </IconButton>
+                ) : null}
+              </div>
+            </Box>
+          </Box>
+          <ShowTasksCompletedPercentage
+            value={cardsTasksCompleted}
+            showOnlyLabel={true}
           />
-        ) : (
-          <div onClick={() => handleOpenModal()}>{card.title}</div>
-        )}
+        </div>
       </div>
-      <div variant="contained">
-        <IconButton onClick={() => setEditCardTitleActive(true)}>
-          <Edit />
-        </IconButton>
-      </div>
-
       <Modal
         open={open}
         onClose={handleCloseModal}

@@ -42,7 +42,7 @@ function PopupComponent({ children, title }) {
         onClose={handleClose}
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "center"
+          horizontal: "right"
         }}
         transformOrigin={{
           vertical: "top",

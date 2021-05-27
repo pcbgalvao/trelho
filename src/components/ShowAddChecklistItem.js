@@ -8,8 +8,7 @@ const ShowAddChecklistItem = ({ onAddHandler, onCancelHandler }) => {
   useKeypress(["Enter", "Escape"], (event) => {
     switch (event.key) {
       case "Escape":
-        event.preventDefault();
-        console.log("#$$$##$#$#Q$Q#$Q#$Q#$");
+        event.preventDefault();        
         onCancelHandler();
         event.stopPropagation();
         break;

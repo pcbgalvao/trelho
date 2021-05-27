@@ -6,6 +6,7 @@ $list-width: 300px;
 $gap: 10px;
 $scrollbar-thickness: 17px;
 $list-header-height: 36px;
+$list-menu-height: 36px;
 $list-footer-height: 36px;
 // Misc
 $list-border-radius: 5px;
@@ -18,7 +19,7 @@ $list-bg-color: #e2e4e6;
 body {
   margin: 0;
 
-  font-family: 'Roboto';
+  font-family: "Roboto";
   font-size: 14px;
   line-height: 1.3em;
 }
@@ -56,7 +57,7 @@ body {
     margin-left: $gap;
   }
   &::after {
-    content: '';
+    content: "";
     flex: 0 0 $gap;
   }
 }
@@ -75,13 +76,56 @@ body {
   header {
     line-height: $list-header-height;
     font-size: 16px;
+    cursor: pointer;
+
     font-weight: bold;
     border-top-left-radius: $list-border-radius;
     border-top-right-radius: $list-border-radius;
   }
 
+  .list-name-header {
+    display: flex;
+    flex-direction: row;
+
+    line-height: $list-header-height;
+    font-size: 16px;
+    font-weight: bold;
+    border-top-left-radius: $list-border-radius;
+    border-top-right-radius: $list-border-radius;
+  }
+
+  .list-header {
+    width: 600px;
+    line-height: $list-header-height;
+    font-size: 16px;
+    font-weight: bold;
+    border-top-left-radius: $list-border-radius;
+    border-top-right-radius: $list-border-radius;
+  }
+
+  .menu-list {
+    width: 600px;
+    line-height: $list-menu-height;
+    font-size: 16px;
+    font-weight: bold;
+    border-top-left-radius: $list-border-radius;
+    border-top-right-radius: $list-border-radius;
+  }
+
+  .icon-menu-list {
+    font-size: 16px;
+    font-weight: bold;
+    border-top-left-radius: $list-border-radius;
+    border-top-right-radius: $list-border-radius;
+  }
+
+  .icon-buttons:hover {
+    background-color: greyI;
+  }
+
   footer {
     line-height: $list-footer-height;
+    cursor: pointer;
     border-bottom-left-radius: $list-border-radius;
     border-bottom-right-radius: $list-border-radius;
     color: #888;
@@ -90,6 +134,7 @@ body {
   ul {
     list-style: none;
     margin: 0;
+    cursor: pointer;
 
     max-height: calc(100% - #{$list-header-height} - #{$list-footer-height});
     overflow-y: auto;
