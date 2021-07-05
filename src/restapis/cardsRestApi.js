@@ -6,12 +6,15 @@ cardsRestApi.init("/cards");
 // ### cards Endpoint
 // ###
 cardsRestApi.getCards = async function getCards(searchFields) {
-  const {iduser, fk_listid} = searchFields;
-  const urlService = `/list/${iduser}/${fk_listid}`;
+  const {fk_userid, fk_listid} = searchFields;
+  let urlService = "/list";
+  urlService = fk_userid ? `${urlService}/${fk_userid}`: urlService;
+  urlService = fk_listid ? `${urlService}/${fk_listid}`: urlService;  
   const response = await this.restApiConn.get(urlService, {});
 
   return response.data;
 };
+
 cardsRestApi.deleteCard = async function deleteCard(cardForm) {
   const URL = "/cards/:id/updateCard/:id";
   const response = await restApiConn.post(URL, cardForm, config);

@@ -3,31 +3,9 @@ import _ from "lodash";
 
 import listsRestApi from "../restapis/listsRestApi";
 import CONSTANTS from "../constants";
-
-const INITIAL_STATE = [
-  {
-    _id: "1",
-    fk_boardid: 1,
-    fk_userid: 1,
-    name: "House Things",
-  },
-  {
-    _id: "2",
-    fk_boardid: 1,
-    fk_userid: 1,
-    name: "List Supermarket",
-  },
-
-  {
-    _id: "3",
-    fk_boardid: 1,
-    fk_serid: 1,
-    name: "Turism Journey",
-  },
-];
-
-const fetchLists = createAsyncThunk("/lists/list", async (idUser) => {
-  const response = await listsRestApi.getLists(idUser);
+const fetchLists = createAsyncThunk("/lists/list", async (searchFields) => {
+  searchFields = { ...searchFields, fk_userid: "1" };
+  const response = await listsRestApi.getLists(searchFields);
   return response;
 });
 
@@ -56,10 +34,15 @@ const listsSlice = createSlice({
       // return [...state, ...action.payload];
     },
     [fetchLists.fulfilled]: (state, action) => {
-      return [...state, ...action.payload];
+      return action.payload.reduce(
+        (newlist, list) => ((newlist[list._id] = list), newlist),
+        {}
+      );
+      // return [...state, ...action.payload];
     },
     [createList.fulfilled]: (state, action) => {
-      return [...state, action.payload];
+      const newList = action.payload;
+      return {...state, [newList._id]: newList};
     },
   },
 });

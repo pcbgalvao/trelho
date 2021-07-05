@@ -1,22 +1,25 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "../styles.scss";
 import Navbar from "./Navbar";
 import ShowLists from "./ShowLists";
 
-import { fetchLists } from "../stores/listsSlice";
+
+
 
 function App() {
   const dispatch = useDispatch();
+  //const listSet = useSelector((state) => Object.values(state.lists));
+  //const cardSet = useSelector((state) => state.cards);
   useEffect(() => {
-    dispatch(fetchLists("1"));
+      
   }, []);
 
   console.count("App");
   return (
     <div className="ui">
       <Navbar />
-      <ShowLists />
+      <ShowLists  />
     </div>
   );
 }

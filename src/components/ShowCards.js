@@ -3,13 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchCards } from "../stores/cardsSlice";
 import ShowModalCardDetails from "./ShowModalCardDetails";
 
-function ShowCards(props) {
-  const listId = props.listId;
-  const cardSet = useSelector((state) =>
-    state.cards.filter((card) => card.fk_listid === listId)
-  );
+function ShowCards({cardSet}) {  
 
-  console.log("ShowCards-listId-", listId);
+  
   console.log("ShowCards-cardSet-", (cardSet));
   console.count("ShowCards");
   return (

@@ -5,9 +5,10 @@ listsRestApi.init("/lists");
 
 // ### Lists Endpoint
 // ###
-listsRestApi.getLists = async function getLists() {
-  const urlService = "/lists";
-  const response = await this.restApiConn.get("", {});
+listsRestApi.getLists = async function getLists(searchFields) {
+  const {fk_userid} = searchFields;
+  const urlService = `/list/${fk_userid}`;
+  const response = await this.restApiConn.get(urlService, {});
 
   return response.data;
 };

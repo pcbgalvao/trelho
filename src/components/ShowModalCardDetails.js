@@ -17,8 +17,6 @@ import Edit from "@material-ui/icons/Edit";
 import { createChecklist, fetchChecklists } from "../stores/checklistsSlice";
 import { updateCard } from "../stores/cardsSlice";
 
-
-
 function getModalStyle() {
   const top = 50;
   const left = 50;
@@ -49,23 +47,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ShowModalCardDetails(props) {
-  const { card } = props;
+function ShowModalCardDetails({ card }) {
   const [addChecklistActive, setAddChecklistActive] = useState(false);
   const [editCardTitleActive, setEditCardTitleActive] = useState(false);
   const [modalStyle] = useState(getModalStyle);
   const [open, setOpen] = useState(false);
   const [showMenuList, setShowMenuList] = useState(false);
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     const searchFields = { fk_userid: "1", fk_cardid: card._id };
-    dispatch(fetchChecklists(searchFields));
+    //dispatch(fetchChecklists(searchFields));
   }, [card]);
 
-  const listName = useSelector(
-    (state) => state.lists.filter((list) => list._id === card.fk_listid)[0].name
-  );
+  const listName = useSelector((state) => state.lists[card.fk_listid]);
+
+  /*
   const cardsTasksCompleted = useSelector((state) => {
     let items = [];
     const checklistsResult = state.checklists.filter(
@@ -88,6 +85,8 @@ function ShowModalCardDetails(props) {
 
     return `${numberTasksCompleted}/${numberTasks}` + "";
   });
+
+  */
 
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
@@ -216,11 +215,11 @@ function ShowModalCardDetails(props) {
               </div>
             </Box>
           </Box>
-{/*          <ShowTasksCompletedPercentage
+          {/*          <ShowTasksCompletedPercentage
             value={cardsTasksCompleted}
             showOnlyLabel={true}  
           />
-*/}                    
+*/}
         </div>
       </div>
       <Modal

@@ -6,7 +6,8 @@ import CONSTANTS from "../constants";
 
 const fetchCards = createAsyncThunk(
   "/cards/fetchCards",
-  async ( searchFields ) => {
+  async (searchFields) => {
+    searchFields = { ...searchFields, fk_userid: "1" };
     const response = await cardsRestApi.getCards(searchFields);
     return response;
   }
@@ -40,10 +41,14 @@ const cardsSlice = createSlice({
   },
   extraReducers: {
     [fetchCards.fulfilled]: (state, action) => {
-      return [...state, ...action.payload];
+      return action.payload.reduce(
+        (newCard, card) => ((newCard[card._id] = card), newCard),
+        {}
+      );
     },
     [createCard.fulfilled]: (state, action) => {
-      return [...state, action.payload];
+      const newCard=action.payload;
+      return {...state, [newCard._id]:newCard};
     },
     [renameFieldCard.fulfilled]: (state, action) => {
       return [...state, action.payload];
