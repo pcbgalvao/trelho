@@ -1,70 +1,64 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import _ from "lodash";
-
+import cardsRestApi from "../restapis/cardsRestApi";
 // import cardsRestApi from "../restApi/cardsRestApi";
 import CONSTANTS from "../constants";
 
-const INITIAL_STATE = [
-  {
-    _id: "1",
-    fk_listid: "1",
-    fk_userid: "1",
-    title: "House Cleaning",
-    creationTimestamp: 1619605503272,
-    description: "Things I must do in each two weaks at the most"
-  },
-  {
-    _id: "2",
-    fk_listid: "2",
-    fk_userid: "1",
-    title: "supermaket",
-    description: "food, hamers, ..."
-  },
-  {
-    _id: "13",
-    fk_listid: "3",
-    fk_userid: "1",
-    title: "Destinations",
-    description: "Countries, Regions"
+const fetchCards = createAsyncThunk(
+  "/cards/fetchCards",
+  async ( searchFields ) => {
+    const response = await cardsRestApi.getCards(searchFields);
+    return response;
   }
-];
+);
+
+const createCard = createAsyncThunk("/cards/createCard", async (cardForm) => {
+  const response = await cardsRestApi.createCard(cardForm);
+  return response;
+});
+
+const renameFieldCard = createAsyncThunk(
+  "/cards/renameFieldCard",
+  async (cardForm) => {
+    const response = await cardsRestApi.renameFieldCard(cardForm);
+    return response;
+  }
+);
 
 const cardsSlice = createSlice({
   name: "cards",
-  initialState: INITIAL_STATE,
+  initialState: [],
   reducers: {
-    fetchCards(state, actions) {
-      return state;
-    },
-    createCard: (state, action) => {
-      const newCard = action.payload;
-      newCard.creationtimestamp = Date.now();
-      return [...state, newCard];
-    },
     updateCard: (state, action) => {
       let newCard = action.payload;
-      newCard.creationtimestamp = Date.now();
-
       return _.unionBy([newCard], state, "_id");
     },
     setCardTitle: (state, action) => {
-      return _.unionBy([action.payload], state, "_id");
-    }
+      let newCard = action.payload;
+      return _.unionBy([newCard], state, "_id");
+    },
   },
-  extraReducers: {}
+  extraReducers: {
+    [fetchCards.fulfilled]: (state, action) => {
+      return [...state, ...action.payload];
+    },
+    [createCard.fulfilled]: (state, action) => {
+      return [...state, action.payload];
+    },
+    [renameFieldCard.fulfilled]: (state, action) => {
+      return [...state, action.payload];
+    },
+  },
 });
 
 export const selectcardName = (state) => {
   console.log("state-", state);
   return state.cards.cardname;
 };
+
 export const selectLists = (state) => state.cards.lists;
-export const {
-  createCard,
-  setCardTitle,
-  updateCard,
-  fetchCards
-} = cardsSlice.actions;
+export const { setCardTitle, updateCard } = cardsSlice.actions;
 //### Reducers
 
 export default cardsSlice.reducer;
+export { fetchCards, createCard, renameFieldCard };

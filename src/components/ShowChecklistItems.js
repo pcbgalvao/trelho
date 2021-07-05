@@ -3,45 +3,37 @@ import { useSelector, useDispatch } from "react-redux";
 import ShowChecklistItem from "./ShowChecklistItem";
 import ShowAddChecklistItem from "./ShowAddChecklistItem";
 import { Button } from "@material-ui/core";
-import { createChecklistItem } from "../stores/checklistsItemsSlice";
-const uniqid = require("uniqid");
+import { createItem } from "../stores/checklistItemsSlice";
 
-function ShowChecklistItems(props) {
-  const { checklistId } = props;
+function ShowChecklistItems({ checklistId }) {
   const [addChecklistItemActive, setAddChecklistItemActive] = useState(false);
-  const dispatch = useDispatch();
-  const checklistItemsSet = useSelector((state) =>
-    state.checklistsItems.filter(
-      (checklistItems) => checklistItems.fk_checklistid === checklistId
-    )
+  const items = useSelector((state) =>
+    state.checklistItems.filter((item) => item.fk_checklistid === checklistId)
   );
-  console.log("ShowChecklistItems-checklistItemsSet-", checklistItemsSet);
+  const dispatch = useDispatch();
 
   const onAddChecklistItemHandler = (newChecklistItemName) => {
-    const newChecklistItem = {
-      _id: uniqid(),
+    const newItem = {
       name: newChecklistItemName,
+      fk_checklistid: checklistId,
       value: false,
-      fk_userid: 1,
-      fk_checklistid: checklistId
     };
 
-    dispatch(createChecklistItem(newChecklistItem));
+    dispatch(createItem(newItem));
   };
 
   const onAddChecklistItemCancelHandler = (event) => {
     setAddChecklistItemActive(false);
   };
 
-  //const updateCheckListValue = 
+  //const updateCheckListValue =
   return (
     <>
       <div className="list">
-        {checklistItemsSet.map((checklistItem) => {
+        {items.map((checklistItem) => {
           return (
             <div key={checklistItem._id}>
-              <ShowChecklistItem checklistItem={checklistItem} 
-               />
+              <ShowChecklistItem checklistItem={checklistItem} />
             </div>
           );
         })}

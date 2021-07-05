@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -14,9 +14,10 @@ import ShowInput from "./ShowInput";
 import ShowInputIcon from "./ShowInputIcon";
 import { IconButton } from "@material-ui/core";
 import Edit from "@material-ui/icons/Edit";
-import { createChecklist } from "../stores/checklistsSlice";
+import { createChecklist, fetchChecklists } from "../stores/checklistsSlice";
 import { updateCard } from "../stores/cardsSlice";
-const uniqid = require("uniqid");
+
+
 
 function getModalStyle() {
   const top = 50;
@@ -55,8 +56,13 @@ function ShowModalCardDetails(props) {
   const [modalStyle] = useState(getModalStyle);
   const [open, setOpen] = useState(false);
   const [showMenuList, setShowMenuList] = useState(false);
-
   const dispatch = useDispatch();
+  
+  useEffect(() => {
+    const searchFields = { fk_userid: "1", fk_cardid: card._id };
+    dispatch(fetchChecklists(searchFields));
+  }, [card]);
+
   const listName = useSelector(
     (state) => state.lists.filter((list) => list._id === card.fk_listid)[0].name
   );
@@ -67,7 +73,7 @@ function ShowModalCardDetails(props) {
     );
 
     checklistsResult.forEach((checklist) =>
-      state.checklistsItems.forEach((item) => {
+      state.checklistItems.forEach((item) => {
         if (
           item.fk_checklistid === checklist._id &&
           checklist.fk_cardid === card._id
@@ -95,7 +101,6 @@ function ShowModalCardDetails(props) {
   };
   const onAddChecklistHandler = (newChecklistTitle) => {
     const newChecklist = {
-      _id: uniqid(),
       fk_cardid: card._id,
       title: newChecklistTitle,
       fk_userid: card.fk_userid,
@@ -112,16 +117,16 @@ function ShowModalCardDetails(props) {
     event.stopPropagation();
   };
 
-  const updateCardField = (updatedField) => ({
-    updatedValue = event.target.value,
-  }) => {
-    dispatch(
-      updateCard({
-        ...card,
-        [updatedField]: updatedValue,
-      })
-    );
-  };
+  const updateCardField =
+    (updatedField) =>
+    ({ updatedValue = event.target.value }) => {
+      dispatch(
+        updateCard({
+          ...card,
+          [updatedField]: updatedValue,
+        })
+      );
+    };
 
   const updateChecklistDescription = (newChecklistDescription) => {};
 
@@ -175,7 +180,8 @@ function ShowModalCardDetails(props) {
   };
 
   console.log("showModalCardDetails-editCardTitleActive-", editCardTitleActive);
-  console.log("showModalCardDetails-listName-", listName);
+  console.log("showModalCardDetails-listName-", card);
+  console.count("ShowModalCardDetails");
   return (
     <div>
       <div onMouseLeave={disableMenuList} onMouseEnter={enableMenuList}>
@@ -192,7 +198,9 @@ function ShowModalCardDetails(props) {
               </Box>
             ) : (
               <Box width="100%" mr={1}>
-                <div onClick={() => handleOpenCardDetailsModal()}>{card.title}</div>
+                <div onClick={() => handleOpenCardDetailsModal()}>
+                  {card.title}
+                </div>
               </Box>
             )}
             <Box width="100%" height="80%" mr={1}>
@@ -208,10 +216,11 @@ function ShowModalCardDetails(props) {
               </div>
             </Box>
           </Box>
-          <ShowTasksCompletedPercentage
+{/*          <ShowTasksCompletedPercentage
             value={cardsTasksCompleted}
-            showOnlyLabel={true}
+            showOnlyLabel={true}  
           />
+*/}                    
         </div>
       </div>
       <Modal

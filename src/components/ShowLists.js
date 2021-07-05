@@ -1,22 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Button, ClickAwayListener } from "@material-ui/core";
 import ShowList from "./ShowList";
 import ShowAddList from "./ShowAddList";
 import { createList } from "../stores/listsSlice";
-const uniqid = require("uniqid");
 
-function ShowLists(props) {
+function ShowLists() {
   const [addListActive, setAddListActive] = useState(false);
-  const listSet = useSelector((state) => state.lists);
+  const listSet = useSelector((state) =>
+    state.lists.filter((list) => list.fk_userid === "1")
+  );
   const dispatch = useDispatch();
 
   const onAddListHandler = (newListTitle) => {
     const newList = {
-      _id: uniqid(),
-      fk_userid: 1,
-      fk_boardid: 1,
-      name: newListTitle
+      fk_userid: "1",
+      fk_boardid: "1",
+      name: newListTitle,
     };
 
     dispatch(createList(newList));
@@ -29,6 +29,7 @@ function ShowLists(props) {
   };
 
   console.log("ShowLists-listSet", listSet);
+  console.count("ShowLists");
   return (
     <div className="lists">
       {listSet.map((list) => {

@@ -1,30 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ShowInput from "./ShowInput";
 import ShowChecklistItems from "./ShowChecklistItems";
 import ShowTasksCompletedPercentage from "./ShowTasksCompletedPercentage";
 import Button from "@material-ui/core/Button";
-import { updateChecklist } from "../stores/checklistsSlice";
-import { deleteChecklist } from "../stores/checklistsSlice";
+
+//import { updateChecklist } from "../stores/checklistsSlice";
+//import { deleteChecklist } from "../stores/checklistsSlice";
 
 function ShowChecklist({ checklistId }) {
+  const dispatch = useDispatch();
+
   const checklist = useSelector(
     (state) =>
       state.checklists.filter((checklist) => checklist._id === checklistId)[0]
   );
   const tasksCompleted = useSelector((state) => {
-    const items = state.checklistsItems.filter(
+    const items = state.checklistItems.filter(
       (item) => item.fk_checklistid === checklistId
     );
     const numberTasksCompleted = items.filter((item) => item.value).length;
     const numberTasks = items.length;
-    return numberTasks>0 ? ((numberTasksCompleted / numberTasks) * 100) : 0;
+    return numberTasks > 0 ? (numberTasksCompleted / numberTasks) * 100 : 0;
   });
 
-  const [editChecklistTitleActive, setEditChecklistTitleActive] = useState(
-    false
-  );
-  const dispatch = useDispatch();
+  const [editChecklistTitleActive, setEditChecklistTitleActive] =
+    useState(false);
 
   const updateChecklistTitle = (newChecklistTitle) => {
     const updatedChecklist = { ...checklist, title: newChecklistTitle };
@@ -32,7 +33,7 @@ function ShowChecklist({ checklistId }) {
   };
 
   const onDeleteChecklist = () => {
-    dispatch(deleteChecklist(checklist._id));
+    //dispatch(deleteChecklist(checklist._id));
   };
 
   return (
@@ -44,10 +45,13 @@ function ShowChecklist({ checklistId }) {
           inputActive={editChecklistTitleActive}
           setInputActive={setEditChecklistTitleActive}
         />
-        <ShowTasksCompletedPercentage value={tasksCompleted} showOnlyLabel={false} />
+        <ShowTasksCompletedPercentage
+          value={tasksCompleted}
+          showOnlyLabel={false}
+        />
         <Button onClick={onDeleteChecklist}>Delete</Button>
       </h4>
-      <ShowChecklistItems checklistId={checklist._id} />
+      {/* <ShowChecklistItems checklistId={checklist._id} /> */}
     </div>
   );
 }

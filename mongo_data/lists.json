@@ -6,14 +6,14 @@
   },
 
   "2": {
-    "fk_boardid": 1,
-    "fk_userid": 1,
+    "fk_boardid": "1",
+    "fk_userid": "1",
     "name": "List Supermarket"
   },
 
   "3": {
     "fk_boardid": 1,
-    "fk_serid": 1,
+    "fk_userid": "1",
     "name": "Turism Journey"
   }
 }

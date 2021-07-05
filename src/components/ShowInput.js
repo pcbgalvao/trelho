@@ -22,22 +22,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ShowInput({
-  inputValue,
-  setInputValue,
-  inputActive,
-  setInputActive,
-}) {
+function ShowInput({ inputValue, setInputValue, inputActive, setInputActive }) {
   const classes = useStyles();
+  const [localInput, setLocalInput] = useState(inputValue);
 
   useKeypress(["Enter", "Escape"], (event) => {
     switch (event.key) {
       case "Escape":
+        setLocalInput("");
         setInputActive(false);
         break;
       case "Enter":
         if (inputValue) {
-          //setInputValue(event.target.value);
+          setInputValue(localInput);
           setInputActive(false);
         }
         break;
@@ -46,7 +43,7 @@ function ShowInput({
   });
 
   const onChangeValue = (event) => {
-    setInputValue(event.target.value);
+    setLocalInput(event.target.value);
   };
 
   const onClick = (event) => {
@@ -61,7 +58,7 @@ function ShowInput({
     <div className={classes.root} onClick={onClick}>
       {inputActive ? (
         <ClickAwayListener onClickAway={onCancel}>
-          <TextField onChange={onChangeValue} value={inputValue} autoFocus />
+          <TextField onChange={onChangeValue} value={localInput} autoFocus />
         </ClickAwayListener>
       ) : (
         <div variant="contained" onClick={onClick}>

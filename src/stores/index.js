@@ -5,13 +5,13 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import listsReducer from "./listsSlice";
 import cardsReducer from "./cardsSlice";
 import checklistsReducer from "./checklistsSlice";
-import checklistsItemsReducer from "./checklistsItemsSlice";
+import checklistItemsReducer from "./checklistItemsSlice";
 
 const rootReducer = combineReducers({
   lists: listsReducer,
   cards: cardsReducer,
   checklists: checklistsReducer,
-  checklistsItems: checklistsItemsReducer
+  checklistItems: checklistItemsReducer
 });
 
 const rootStore = configureStore({
