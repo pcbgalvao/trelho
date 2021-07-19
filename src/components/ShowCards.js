@@ -4,7 +4,6 @@ import { fetchCards } from "../stores/cardsSlice";
 import ShowModalCardDetails from "./ShowModalCardDetails";
 
 function ShowCards({cardSet}) {  
-
   
   console.log("ShowCards-cardSet-", (cardSet));
   console.count("ShowCards");

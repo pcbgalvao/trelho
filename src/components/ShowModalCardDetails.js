@@ -57,10 +57,10 @@ function ShowModalCardDetails({ card }) {
 
   useEffect(() => {
     const searchFields = { fk_userid: "1", fk_cardid: card._id };
-    //dispatch(fetchChecklists(searchFields));
+    dispatch(fetchChecklists(searchFields));
   }, [card]);
 
-  const listName = useSelector((state) => state.lists[card.fk_listid]);
+  const listName = useSelector((state) => state.lists[card.fk_listid].name);
 
   /*
   const cardsTasksCompleted = useSelector((state) => {
@@ -127,8 +127,6 @@ function ShowModalCardDetails({ card }) {
       );
     };
 
-  const updateChecklistDescription = (newChecklistDescription) => {};
-
   const renderedContent = (
     <div className="list">
       <div style={modalStyle} className={classes.paper}>
@@ -179,7 +177,7 @@ function ShowModalCardDetails({ card }) {
   };
 
   console.log("showModalCardDetails-editCardTitleActive-", editCardTitleActive);
-  console.log("showModalCardDetails-listName-", card);
+  console.log("showModalCardDetails-card-", card);
   console.count("ShowModalCardDetails");
   return (
     <div>
